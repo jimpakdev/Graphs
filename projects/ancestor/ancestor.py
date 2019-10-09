@@ -1,4 +1,24 @@
 
+class Graph:
+    """Represent a graph as a dictionary of vertices mapping labels to edges."""
+    def __init__(self):
+        self.vertices = {}
+
+    def add_vertex(self, vertex):
+        """
+        Add a vertex to the graph.
+        """
+        self.vertices[vertex] = set()
+
+    def add_edge(self, v1, v2):
+        """
+        Add a directed edge to the graph.
+        """
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            raise IndexError("Cannot create edge based on given vertices!")
+
 class Stack():
     def __init__(self):
         self.stack = []
@@ -16,13 +36,23 @@ class Stack():
     # ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
     # start from input node
     # create the possible paths upwards the tree
-    # longest path has our earliest ancestor
+    # longest path has the earliest ancestor
     # if input node has no parents, return -1
-def earliest_ancestor(ancestors, starting_node):
+def earliest_ancestor(self, ancestors, starting_node):
     # storing input list of pairs as key - value pairs in dictionary
     my_dict = dict(ancestors)
+    graph = Graph()
     stack = Stack()
     visited = set()
+    
+    # build a graph 
+    for pair in ancestors: 
+        graph.add_vertex(pair[0])
+        graph.add_vertex(pair[1])
+        graph.add_edge(pair[0], pair[1])
+
+    print(graph.vertices)
+
     stack.push([starting_node])
 
     while stack.size() > 0:
@@ -34,44 +64,24 @@ def earliest_ancestor(ancestors, starting_node):
         if node not in visited:
             # add vertex to visited
             visited.add(starting_node)
-    
+            # get adjacent edges for that vertex
+            for adjacent in self.vertices[node]:
+                # construct a new path
+                new_path = list(path)
+                # add the adjacent edges to new path
+                new_path.append(adjacent)
+                # add new path to stack
+                stack.push(new_path)
+        
             # get key from dict
             # check dict to see if key is a child in another pair
             # if the key is a child in another pair 
             # repeat loop
             # else return ancestor parent key
 
+            # directed movement?
 
-# def get_neighbors(word):
-#     neighbors = []
-#     string_word = list(word)
-#     for i in range(len(string_word)):
-#         for letter in list("abcdefghijklmopqrstuvwxyz"):
-#             temp_word = list(string_word)
-#             temp_word[i] = letter
-#             w = ''.join(temp_word)
-#             if w != word and w in word_set:
-#                 neighbors.append(w)
 
-#     return neighbors
-
-# def find_word_ladder(beginWord, endWord):
-
-#     qq = Queue()
-#     visited = set()
-#     qq.enqueue([beginWord])
-
-#     while qq.size() > 0:
-#         path = qq.dequeue()
-#         vertex = path[-1] # vertex is our word ``
-#         if vertex not in visited:
-#             if vertex == endWord:
-#                 return path
-#             visited.add(vertex)
-#             for new_vert in get_neighbors(vertex):
-#                 new_path = list(path)
-#                 new_path.append(new_vert)
-#                 qq.enqueue
 
 
 

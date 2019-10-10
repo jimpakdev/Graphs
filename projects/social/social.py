@@ -1,4 +1,15 @@
-
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
 
 class User:
     def __init__(self, name):
@@ -47,8 +58,13 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
+        for user in range(numUsers):
+            self.addUser(user)
 
         # Create friendships
+        friendship_combinations = []
+
+
 
     def getAllSocialPaths(self, userID):
         """
@@ -61,7 +77,23 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        q = Queue()
+        q.enqueue([userID])
+
+        while q.size() > 0:
+            path = q.dequeue()
+            # last user id in the path
+            node = path[-1]
+            if node not in visited:
+                # path is shortest friendship path between input user and new user
+                visited[node] = path
+                for adjacent in self.friendships[node]:
+                    new_path = list(path)
+                    new_path.append(adjacent)
+                    q.enqueue(new_path)
+
         return visited
+
 
 
 if __name__ == '__main__':

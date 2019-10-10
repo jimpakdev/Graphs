@@ -83,6 +83,8 @@ def earliest_ancestor(ancestors, starting_node):
 
             # 1st part of this check here is for lowest numeric value answer - if there are two ancestors tied 
             # 2nd part of this check: looking for a path longer than the current path
+
+            # PRACTICE: another way
             if (len(path) >= max_path_length and node < earliest_ancestor) or (len(path) > max_path_length):
                 earliest_ancestor = node
                 max_path_length = len(path)

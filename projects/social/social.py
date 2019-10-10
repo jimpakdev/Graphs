@@ -1,3 +1,5 @@
+import random
+
 class Queue():
     def __init__(self):
         self.queue = []
@@ -26,12 +28,14 @@ class SocialGraph:
         Creates a bi-directional friendship
         """
         if userID == friendID:
-            print("WARNING: You cannot be friends with yourself")
+            # print("WARNING: You cannot be friends with yourself")
+            return False # we were unable to create a friendship
         elif friendID in self.friendships[userID] or userID in self.friendships[friendID]:
             print("WARNING: Friendship already exists")
         else:
             self.friendships[userID].add(friendID)
             self.friendships[friendID].add(userID)
+            return True
 
     def addUser(self, name):
         """
@@ -58,11 +62,37 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
 
         # Add users
-        for user in range(numUsers):
-            self.addUser(user)
+        for i in range(numUsers):
+            self.addUser(f"User {i}")
+
+        # Define or keep track of...
+        target_friendships = numUsers * avgFriendships
+        total_friendships = 0
+        collisions = 0
+
+        while total_friendships < target_friendships:
+            userID = random.randint(1, self.lastID)
+            friendID = random.randint(1, self.lastID)
+            if self.addFriendship(userID, friendID):
+                total_friendships += 2
+            else:
+                collisions += 1
+
+        print(f"COLLISIONS: {collisions}")
 
         # Create friendships
-        friendship_combinations = []
+        # friendship_combinations = []
+
+        # # to get all combinations
+        # for UserID in self.users:
+        #     for FriendID in range(UserID + 1, self.lastID + 1): 
+        #         friendship_combinations.append((UserID, FriendID))
+
+        # random.shuffle(friendship_combinations)
+
+        # for i in range(numUsers * avgFriendships // 2):
+        #     friendship = friendship_combinations[i]
+        #     self.addFriendship(friendship[0], friendship[1])
 
 
 
@@ -88,9 +118,9 @@ class SocialGraph:
                 # path is shortest friendship path between input user and new user
                 visited[node] = path
                 for adjacent in self.friendships[node]:
-                    new_path = list(path)
-                    new_path.append(adjacent)
-                    q.enqueue(new_path)
+                    path_copy = path.copy()
+                    path_copy.append(adjacent)
+                    q.enqueue(path_copy)
 
         return visited
 
@@ -102,3 +132,9 @@ if __name__ == '__main__':
     print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     print(connections)
+
+    total_social_paths = 0
+    for user_id in connections:
+        total_social_paths += len(connections[user_id])
+
+    print(f"Avg length of social path: {total_social_paths/len(connections)}")

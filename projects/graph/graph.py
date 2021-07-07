@@ -80,6 +80,7 @@ class Graph:
         This should be done using recursion.
         """
         # initialize visited
+        # could also initialize visited in params
         if visited == None:
             visited = set()
         # add first vertex 
@@ -155,6 +156,7 @@ class Graph:
                     new_path.append(adjacent)
                     # add new path to stack
                     stack.push(new_path)
+                    
 
 
 
